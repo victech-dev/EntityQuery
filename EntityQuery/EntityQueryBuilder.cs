@@ -300,11 +300,10 @@ public class EqBuilder<T>
                     {
                         sb.Append(", ");
                     }
-                    sb.Append(p.GetColumnName());
+                    var columnName = p.GetColumnName();
+                    sb.Append(columnName);
 
-                    // Column명이 지정될 경우 user_id_custom AS UserId 와 같은 꼴이 되도록 추가
-                    var columnAttribute = p.GetCustomAttribute<ColumnAttribute>();
-                    if (columnAttribute != null)
+                    if (p.Name != columnName)
                     {
                         sb.Append(" AS ").Append(p.Name.Encapsulate());
                     }
