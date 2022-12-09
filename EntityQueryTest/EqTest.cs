@@ -1001,7 +1001,7 @@ public partial class EqTest
         );
 
         // Then
-        var user = await con.SelectByIdAsync<User>(id!, tx);
+        var user = await con.SelectByIdAsync<UserRecord>(id!, tx);
         Assert.NotNull(user);
         Assert.Equal("UserRecordTestSimpleGet", user!.Name);
     }
