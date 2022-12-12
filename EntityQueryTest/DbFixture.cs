@@ -70,9 +70,6 @@ public class MySQLFixture : IDisposable
                 @" create table City (Name nvarchar(100) not null, Population int not null) "
             );
             con.Execute(
-                @" CREATE TABLE GUIDTest(Id CHAR(38) NOT NULL,name varchar(50) NOT NULL, CONSTRAINT PK_GUIDTest PRIMARY KEY (Id ASC))"
-            );
-            con.Execute(
                 @" create table StrangeColumnNames (ItemId INTEGER PRIMARY KEY AUTO_INCREMENT, word nvarchar(100) not null, colstringstrangeword nvarchar(100) not null, KeywordedProperty nvarchar(100) null) "
             );
             con.Execute(

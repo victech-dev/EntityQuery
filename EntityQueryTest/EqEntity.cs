@@ -102,24 +102,6 @@ public class City
 [Table("City")]
 public record CityRecord([property: Key] string Name, int Population);
 
-public interface INameColumn
-{
-    string Name { get; set; }
-}
-
-[Table("City")]
-public class CityWithIName : City, INameColumn { }
-
-[Table("Users")]
-public class UserWithIName : User, INameColumn { }
-
-public class GUIDTest
-{
-    [Key]
-    public Guid Id { get; set; }
-    public string Name { get; set; } = "";
-}
-
 public class StringTest
 {
     [Key]
