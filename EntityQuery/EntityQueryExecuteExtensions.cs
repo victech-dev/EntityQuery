@@ -19,10 +19,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> InsertAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Insert().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Insert().Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, entity, tx);
@@ -31,28 +32,31 @@ public static class EntityQueryExecuteExtensions
     public static Task<int> InsertAndGetIntIdAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        return InsertAndGetIdAsync<int, TEntity>(con, entity, tx);
+        return InsertAndGetIdAsync<int, TEntity>(con, entity, tx, cacheKey);
     }
 
     public static Task<long> InsertAndGetLongIdAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        return InsertAndGetIdAsync<long, TEntity>(con, entity, tx);
+        return InsertAndGetIdAsync<long, TEntity>(con, entity, tx, cacheKey);
     }
 
     public static async Task<TKey> InsertAndGetIdAsync<TKey, TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().InsertWithIdentity().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).InsertWithIdentity().Build();
 
         con.TryOpen();
         var ret = await con.QuerySingleAsync(query, entity, tx);
@@ -62,10 +66,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> InsertListAsync<TEntity>(
         this IDbConnection con,
         IEnumerable<TEntity> entities,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Insert().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Insert().Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, entities, tx);
@@ -74,10 +79,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<TEntity?> SelectByIdAsync<TEntity>(
         this IDbConnection con,
         object id,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Select().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Select().Build();
 
         var idProps = typeof(TEntity).GetIdProperties();
         var param = new DynamicParameters();
@@ -100,10 +106,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<TEntity?> SelectByEntityAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Select().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Select().Build();
 
         var idProps = typeof(TEntity).GetIdProperties();
         var param = new DynamicParameters();
@@ -118,10 +125,11 @@ public static class EntityQueryExecuteExtensions
 
     public static async Task<IEnumerable<TEntity>> SelectAllAsync<TEntity>(
         this IDbConnection con,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Select("").Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Select("").Build();
 
         con.TryOpen();
         return await con.QueryAsync<TEntity>(query, null, tx);
@@ -131,10 +139,11 @@ public static class EntityQueryExecuteExtensions
         this IDbConnection con,
         string where,
         object param,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Select(where).Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Select(where).Build();
 
         con.TryOpen();
         return await con.QueryAsync<TEntity>(query, param, tx);
@@ -143,10 +152,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> DeleteByIdAsync<TEntity>(
         this IDbConnection con,
         object id,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Delete().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Delete().Build();
 
         var idProps = typeof(TEntity).GetIdProperties();
         var param = new DynamicParameters();
@@ -179,10 +189,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> DeleteAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Delete().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Delete().Build();
 
         var idProps = typeof(TEntity).GetIdProperties();
         var param = new DynamicParameters();
@@ -199,10 +210,11 @@ public static class EntityQueryExecuteExtensions
         this IDbConnection con,
         string where,
         object param,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Delete(where).Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Delete(where).Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, param, tx);
@@ -211,10 +223,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> UpdateAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Update().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Update().Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, entity, tx);
@@ -225,11 +238,12 @@ public static class EntityQueryExecuteExtensions
         string setClause,
         string whereClause,
         object param,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
         var query = EqBuilder<TEntity>
-            .Create()
+            .Create(cacheKey)
             .UpdateSet()
             .Append(" ")
             .Append(setClause)
@@ -243,10 +257,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> UpsertAsync<TEntity>(
         this IDbConnection con,
         TEntity entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Upsert().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Upsert().Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, entity, tx);
@@ -256,10 +271,11 @@ public static class EntityQueryExecuteExtensions
         this IDbConnection con,
         string whereClause,
         object param,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Upsert().Where(whereClause).Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Upsert().Where(whereClause).Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, param, tx);
@@ -270,11 +286,12 @@ public static class EntityQueryExecuteExtensions
         string setClause,
         string whereClause,
         object param,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
         var query = EqBuilder<TEntity>
-            .Create()
+            .Create(cacheKey)
             .UpsertWithoutSet(setClause)
             .Where(whereClause)
             .Build();
@@ -286,10 +303,11 @@ public static class EntityQueryExecuteExtensions
     public static async Task<int> UpsertListAsync<TEntity>(
         this IDbConnection con,
         IEnumerable<TEntity> entity,
-        IDbTransaction? tx = null
+        IDbTransaction? tx = null,
+        string? cacheKey = null
     )
     {
-        var query = EqBuilder<TEntity>.Create().Upsert().Build();
+        var query = EqBuilder<TEntity>.Create(cacheKey).Upsert().Build();
 
         con.TryOpen();
         return await con.ExecuteAsync(query, entity, tx);
